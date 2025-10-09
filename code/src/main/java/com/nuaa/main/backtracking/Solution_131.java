@@ -7,36 +7,27 @@ public class Solution_131 {
     List<List<String>> ans = new ArrayList<>();
     List<String> path = new ArrayList<>();
     public List<List<String>> partition(String s) {
-        backtracking(s, 0);
+        backtracking(s, 0, new StringBuilder());
         return ans;
     }
-    public void backtracking(String str, int startIndex) {
+    public void backtracking(String str, int startIndex, StringBuilder sb) {
         if (startIndex >= str.length()) {
             ans.add(new ArrayList<>(path));
             return;
         }
         for (int i = startIndex; i < str.length(); i++) {
-            if (isTrue(str, startIndex, i + 1))
-                path.add(str.substring(startIndex, i + 1));
-            else
-                continue;
-            backtracking(str, i + 1);
-            path.remove(path.size() - 1);
+            sb.append(str.charAt(i));
+            if (check(sb)){
+                path.add(sb.toString());
+                backtracking(str, i + 1, new StringBuilder());
+                path.remove(path.size() -1 );
+            }
         }
     }
-    public boolean isTrue(String s, int start, int end) {
-        String str = s.substring(start, end);
-        int len = str.length();
-        int left = 0;
-        int right = len - 1;
-        while (left <= right) {
-            if (str.charAt(left) == str.charAt(right)){
-                left++;
-                right--;
-                continue;
-            }else{
-                return false;
-            }
+    //helper method, 检查是否是回文
+    private boolean check(StringBuilder sb){
+        for (int i = 0; i < sb.length()/ 2; i++){
+            if (sb.charAt(i) != sb.charAt(sb.length() - 1 - i)){return false;}
         }
         return true;
     }
